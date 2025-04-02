@@ -8,7 +8,7 @@ pygame.display.set_caption("Move the Ball")
 
 ball_radius = 25
 ball_x, ball_y = WIDTH // 2, HEIGHT // 2
-ball_color = (255, 0, 0)
+ball_color = (160, 32, 240)  # Purple color
 
 ball_speed = 20
 

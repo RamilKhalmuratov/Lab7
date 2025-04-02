@@ -11,13 +11,10 @@ pygame.display.set_caption("Mickey Mouse Clock")
 clock_img = pygame.image.load("image.png")
 clock_img = pygame.transform.scale(clock_img, (WIDTH, HEIGHT))
 
-def draw_hand(image, angle, center, length, offset=(0, 0)):
-    rotated_image = pygame.transform.rotate(image, angle)
-    rect = rotated_image.get_rect(center=center)
-    screen.blit(rotated_image, (rect.x + offset[0], rect.y + offset[1]))
-
-hand_image = pygame.Surface((10, 100), pygame.SRCALPHA)
-pygame.draw.rect(hand_image, (0, 0, 0), (4, 0, 2, 100))
+def draw_hand(surface, angle, center, length, width, color):
+    end_x = center[0] + length * math.cos(math.radians(angle))
+    end_y = center[1] - length * math.sin(math.radians(angle))
+    pygame.draw.line(surface, color, center, (end_x, end_y), width)
 
 running = True
 while running:
@@ -25,14 +22,17 @@ while running:
     screen.blit(clock_img, (0, 0))
 
     current_time = time.localtime()
+    hours = current_time.tm_hour % 12
     minutes = current_time.tm_min
     seconds = current_time.tm_sec
 
-    min_angle = -(minutes * 6)
-    sec_angle = -(seconds * 6)
+    sec_angle = -(seconds * 6 - 90)
+    min_angle = -(minutes * 6 - 90)
+    hour_angle = -(hours * 30 + minutes * 0.5 - 90)
 
-    draw_hand(hand_image, min_angle, (WIDTH // 2, HEIGHT // 2), 100)
-    draw_hand(hand_image, sec_angle, (WIDTH // 2, HEIGHT // 2), 120)
+    draw_hand(screen, hour_angle, (WIDTH // 2, HEIGHT // 2), 80, 8, (0, 0, 0))
+    draw_hand(screen, min_angle, (WIDTH // 2, HEIGHT // 2), 100, 5, (0, 0, 0))
+    draw_hand(screen, sec_angle, (WIDTH // 2, HEIGHT // 2), 120, 2, (255, 0, 0))
 
     pygame.display.update()
 

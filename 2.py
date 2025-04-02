@@ -12,6 +12,7 @@ font = pygame.font.Font(None, 36)
 MUSIC_FOLDER = "musicc"
 songs = [f for f in os.listdir(MUSIC_FOLDER) if f.endswith(".mp3")]
 current_song = 0
+paused = False
 
 def load_song(index):
     pygame.mixer.music.load(os.path.join(MUSIC_FOLDER, songs[index]))
@@ -32,8 +33,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_z:
+            if event.key == pygame.K_q:
                 pygame.mixer.music.unpause()
+                paused = False
             elif event.key == pygame.K_x:
                 pygame.mixer.music.stop()
             elif event.key == pygame.K_c:
@@ -42,5 +44,11 @@ while running:
             elif event.key == pygame.K_SPACE:
                 current_song = (current_song - 1) % len(songs)
                 load_song(current_song)
+            elif event.key == pygame.K_p:
+                if paused:
+                    pygame.mixer.music.unpause()
+                else:
+                    pygame.mixer.music.pause()
+                paused = not paused
 
 pygame.quit()
